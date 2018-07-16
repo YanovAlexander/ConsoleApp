@@ -4,6 +4,7 @@ package ua.com.corevalue.service;
 public class InputString {
 
     private String command;
+    private static String EMAIL_VERIFICATION = "\\w{1}[A-Za-z0-9\\._\\-]*@[A-Za-z0-9\\._\\-]*\\.*[A-Za-z]*";
 
     public InputString(String inputString) {
         this.command = inputString;
@@ -18,11 +19,8 @@ public class InputString {
         }
     }
 
-    public void validatePairs(String inputString){
-        if (getLength() % 2 != 0){
-            throw new IllegalArgumentException("Invalid command, you must enter and even " +
-                    "number of parameters in the following format: " + inputString);
-        }
+    public static boolean isEmailCorrect(String email) {
+        return email.trim().matches(EMAIL_VERIFICATION);
     }
 
     public int getLength() {

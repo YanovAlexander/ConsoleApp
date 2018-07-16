@@ -16,31 +16,6 @@ import java.util.Optional;
 public class PostgresManager implements DatabaseManager {
 
     @Override
-    public Integer countUsers() {
-        Transaction trns = null;
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        BigInteger counter = null;
-
-        try {
-            trns = session.beginTransaction();
-
-            counter = (BigInteger) session.createNativeQuery("SELECT COUNT(employee_id) FROM employees")
-                    .uniqueResult();
-
-            trns.commit();
-        } catch (RuntimeException e) {
-            if (trns != null) {
-                trns.rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            session.close();
-        }
-
-        return counter.intValue();
-    }
-
-    @Override
     public EmployeeData findEmployeeByEmail(String email) {
         Transaction tx = null;
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -146,5 +121,50 @@ public class PostgresManager implements DatabaseManager {
             session.close();
         }
         return ceo;
+    }
+
+    @Override
+    public Boolean isCEOExist() {
+        Transaction tx = null;
+        EmployeeData data = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+
+            data = (EmployeeData) session.createQuery("FROM EmployeeData emp WHERE emp.email IS NULL")
+                    .uniqueResult();
+
+            tx.commit();
+        } catch (RuntimeException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+
+        return data != null;
+    }
+
+    @Override
+    public Boolean isEmailExist(String email) {
+        Transaction tx = null;
+        EmployeeData data = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            tx = session.beginTransaction();
+
+            data = (EmployeeData) session.createQuery("FROM EmployeeData emp WHERE emp.email = :email")
+                    .setParameter("email", email)
+                    .uniqueResult();
+
+            tx.commit();
+        } catch (RuntimeException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+
+        return data != null;
     }
 }

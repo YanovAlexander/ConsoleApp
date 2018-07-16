@@ -44,7 +44,7 @@ public class Help implements Command {
         view.write("\t|\t-> To find CEO by employee email");
         view.write("\t+------------------------------------------------------------------");
 
-        view.write("\t| saveEmployee");
+        view.write("\t| createEmployee");
         view.write("\t|\t-> To save new employee");
         view.write("\t+------------------------------------------------------------------");
     }

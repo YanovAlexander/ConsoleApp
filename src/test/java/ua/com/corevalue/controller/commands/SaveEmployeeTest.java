@@ -25,7 +25,7 @@ public class SaveEmployeeTest {
     @Test
     public void saveEmployeeCanProcessTest() {
         //when
-        InputString userInput = new InputString("saveEmployee");
+        InputString userInput = new InputString("createEmployee");
         boolean result = command.canProcess(userInput);
         //then
         assertTrue(result);

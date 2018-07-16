@@ -5,7 +5,7 @@ import ua.com.corevalue.model.entity.EmployeeData;
 import ua.com.corevalue.service.InputString;
 import ua.com.corevalue.view.View;
 
-public class SaveEmployee implements Command{
+public class SaveEmployee implements Command {
     private boolean interruptCreate;
     private View view;
     private DatabaseManager manager;
@@ -19,13 +19,12 @@ public class SaveEmployee implements Command{
     public boolean canProcess(InputString entry) {
         String[] splitFormat = format().split("\\|");
         String[] parameters = entry.getParameters();
-        boolean equals = parameters[0].equals(splitFormat[0]);
-        return equals;
+        return parameters[0].equals(splitFormat[0]);
     }
 
     @Override
     public String format() {
-        return "saveEmployee";
+        return "createEmployee";
     }
 
     @Override
@@ -75,21 +74,22 @@ public class SaveEmployee implements Command{
                 exit = true;
                 interruptCreate = true;
             } else if (input.trim().isEmpty()) {
-                view.write("name can't be empty");
-            }
-            manager = findManagerByEmail(input);
-
-            if (manager != null) {
-                exit = true;
-            } else if (!interruptCreate){
-                view.write("manager not exist by email");
+                if (isCEOExist()) {
+                    view.write("CEO already exist, other employees need to have manager");
+                } else {
+                    exit = true;
+                }
+            } else {
+                manager = findManagerByEmail(input);
+                if (manager != null) {
+                    exit = true;
+                } else if (!interruptCreate) {
+                    view.write("manager not exist by email");
+                }
             }
         }
-        return manager;
-    }
 
-    private EmployeeData findManagerByEmail(String email) {
-        return manager.findEmployeeByEmail(email);
+        return manager;
     }
 
     private String createEmail() {
@@ -104,7 +104,11 @@ public class SaveEmployee implements Command{
                 exit = true;
                 interruptCreate = true;
             } else if (input.trim().isEmpty()) {
-                view.write("name can't be empty");
+                view.write("email can't be empty");
+            } else if (!InputString.isEmailCorrect(input)) {
+                view.write("email is incorrect");
+            } else if (isEmailExist(input)) {
+                view.write("email already exist");
             } else {
                 exit = true;
             }
@@ -124,7 +128,7 @@ public class SaveEmployee implements Command{
                 exit = true;
                 interruptCreate = true;
             } else if (input.trim().isEmpty()) {
-                view.write("name can't be empty");
+                view.write("last name can't be empty");
             } else {
                 exit = true;
             }
@@ -144,11 +148,23 @@ public class SaveEmployee implements Command{
                 exit = true;
                 interruptCreate = true;
             } else if (input.trim().isEmpty()) {
-                view.write("name can't be empty");
+                view.write("first name can't be empty");
             } else {
                 exit = true;
             }
         }
         return input;
+    }
+
+    private Boolean isCEOExist() {
+        return manager.isCEOExist();
+    }
+
+    private EmployeeData findManagerByEmail(String email) {
+        return manager.findEmployeeByEmail(email);
+    }
+
+    private Boolean isEmailExist(String email) {
+        return manager.isEmailExist(email);
     }
 }

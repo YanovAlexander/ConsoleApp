@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface DatabaseManager {
 
-    Integer countUsers();
-
     EmployeeData findEmployeeByEmail(String email);
 
     void saveEmployee(EmployeeData newEmployee);
@@ -15,4 +13,8 @@ public interface DatabaseManager {
     List<EmployeeData> getSubordinatesByManagerEmail(String email);
 
     EmployeeData getCEOByEmployeeEmail(String email);
+
+    Boolean isCEOExist();
+
+    Boolean isEmailExist(String email);
 }

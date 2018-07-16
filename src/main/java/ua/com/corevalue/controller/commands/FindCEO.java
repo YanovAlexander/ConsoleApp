@@ -36,10 +36,10 @@ public class FindCEO implements Command {
 
         if (!interrupt) {
             view.write("+------------------------CEO-----------------------------");
-                view.write("First name: " + ceo.getFirstName());
-                view.write("Last name: " + ceo.getLastName());
-                view.write("Email: " + ceo.getEmail());
-                view.write("+------------------------------------------------------------------");
+            view.write("First name: " + ceo.getFirstName());
+            view.write("Last name: " + ceo.getLastName());
+            view.write("Email: " + ceo.getEmail());
+            view.write("+------------------------------------------------------------------");
         } else {
             view.write("Back to main menu");
         }

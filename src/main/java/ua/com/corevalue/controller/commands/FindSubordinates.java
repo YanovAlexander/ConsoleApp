@@ -35,7 +35,6 @@ public class FindSubordinates implements Command {
         List<EmployeeData> employees = getEmployee();
 
         if (!interrupt) {
-            view.write("+------------------------SUBORDINATES-----------------------------");
             employees.forEach(employee -> {
                 view.write("+------------------------------------------------------------------");
                 view.write("Employee:");
